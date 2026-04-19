@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenPulse Agriculture | Malawi Farmers Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        .logo-font { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        .hero-bg {
+            background: linear-gradient(90deg, rgba(34,197,94,0.92), rgba(134,239,172,0.88)), 
+                        url('images/20260413_171807.jpg') center/cover no-repeat;
+        }
+        
+        .nav-link:after {
+            content: ''; position: absolute; width: 0; height: 3px; bottom: -2px; left: 0; background: #22c55e;
+        }
+        .nav-link:hover:after { width: 100%; }
+
+        /* Logo: Black rounded square + green triangle on right */
+        .custom-logo {
+            position: relative;
+            width: 52px;
+            height: 52px;
+        }
+        .custom-logo .square {
+            width: 33px;
+              height: 33px;
+              background: #2c3e50;
+              border-radius: 10px;
+              position: absolute;
+              top: 10px;
+              left: 8px;
+              bottom: 1px;
+              z-index: 2;
+        }
+        .custom-logo .triangle {
+             position:absolute;
+             width: 17px;
+             height: 17px;
+             border-right: 30px solid green;
+             left: 23px;
+             border-radius: 20px;
+             z-index: 1;
+             bottom: 8px;
+             transform: rotate(130deg);
+            }
+    
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- NAVBAR - Improved with Login & Sign Up -->
+    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="custom-logo">
+                        <div class="square"></div>
+                        <div class="triangle"></div>
+                    </div>
+                    <div>
+                        <h1 class="logo-font text-4xl font-semibold tracking-tight">
+                            <span class="text-gray-800">Green</span><span class="text-green-600">Pulse</span>
+                        </h1>
+                        <p class="text-xs text-green-600 -mt-1">AGRICULTURE</p>
+                    </div>
+                    <span class="ml-3 text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Malawi</span>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="crop.html" class="nav-link">Crops</a>
+                    <a href="livestock.html" class="nav-link">Livestock</a>
+                    <a href="shop.html" class="nav-link">Shop</a>
+                    <a href="sustainable.html" class="nav-link">Practices</a>
+                    <a href="prices.html" class="nav-link">Marketplace</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="showLoginModal()" class="px-6 py-2 text-sm font-medium border border-green-600 text-green-600 rounded-3xl hover:bg-green-50 transition">Log In</button>
+                    <button onclick="showSignupModal()" class="px-6 py-2 text-sm font-medium bg-green-600 text-white rounded-3xl hover:bg-green-700 transition">Sign Up</button>
+                    
+                    <button onclick="toggleCart()" class="relative p-3 hover:bg-green-100 rounded-2xl">
+                        🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">☰</button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t py-6 px-6 flex flex-col gap-4 text-base">
+                <a href="index.html" onclick="toggleMobileMenu()" class="py-2">🏠 Home</a>
+                <a href="crop.html" onclick="toggleMobileMenu()" class="py-2">🌾 Crops</a>
+                <a href="livestock.html" onclick="toggleMobileMenu()" class="py-2">🐄 Livestock</a>
+                <a href="shop.html" onclick="toggleMobileMenu()" class="py-2">🛒 Shop</a>
+                <a href="sustainable.html" onclick="toggleMobileMenu()" class="py-2">♻ Practices</a>
+                <a href="prices.html" onclick="toggleMobileMenu()" class="py-2">📈 Marketplace</a>
+                <div class="pt-4 border-t flex flex-col gap-3">
+                    <button onclick="showLoginModal();toggleMobileMenu()" class="py-3 border border-green-600 text-green-600 rounded-3xl">Log In</button>
+                    <button onclick="showSignupModal();toggleMobileMenu()" class="py-3 bg-green-600 text-white rounded-3xl">Sign Up - Free</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO - Improved as "On Top" Section -->
+    <section id="home" class="hero-bg text-white py-32 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-6 py-2 rounded-full mb-6">
+                <span class="text-sm font-medium">Malawi's #1 Farming Platform</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-bold logo-font leading-none mb-6">Empowering Malawi Farmers & Agricultural Businesses</h1>
+            <p class="text-2xl max-w-2xl mx-auto">
+                Our vision is to transform agriculture in Malawi by empowering farmers and agribusinesses through a modern,
+                 sustainable, and climate-smart digital platform that enhances productivity, 
+                ensures food security,promotes environmental protection, and creates profitable market opportunities for all.
+            </p>
+            <div class="mt-12 flex flex-wrap gap-4 justify-center">
+                <a href="shop.html" class="bg-white text-green-700 px-12 py-6 rounded-3xl font-semibold text-xl shadow-lg hover:shadow-xl transition">🛒 Shop Now</a>
+                <a href="prices.html" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" class="border-2 border-white text-white px-12 py-6 rounded-3xl font-semibold text-xl hover:bg-white/10 transition">Browse Marketplace</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CROP GUIDES - All major crops in Malawi -->
+    <section id="crops" class="max-w-7xl mx-auto px-6 py-20">
+        <h2 class="text-5xl font-bold logo-font mb-10">All Crops Grown in Malawi</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" id="crop-grid"></div>
+    </section>
+
+    <!-- LIVESTOCK -->
+    <section id="livestock" class="bg-green-50 py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold logo-font mb-10">Livestock Raised in Malawi</h2>
+            <div class="grid md:grid-cols-3 gap-8" id="livestock-grid"></div>
+        </div>
+    </section>
+
+    <!-- SHOP - Improved "On Top" Style with better filters and prominence -->
+    <section id="shop" class="max-w-7xl mx-auto px-6 py-20 bg-white">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+                <h2 class="text-5xl font-bold logo-font mb-3">Farm Shop</h2>
+                <p class="text-xl text-gray-600">Seeds • Tools • Fertilizers • Fresh Produce • Animal Products • Delivered Across Malawi</p>
+            </div>
+            <div class="flex gap-3 mt-6 md:mt-0 flex-wrap" id="shop-filters">
+                <button onclick="filterCategory('all')" class="active px-8 py-3 border rounded-3xl font-medium">All Products</button>
+                <button onclick="filterCategory('seeds')" class="px-8 py-3 border rounded-3xl font-medium">Seeds</button>
+                <button onclick="filterCategory('tools')" class="px-8 py-3 border rounded-3xl font-medium">Tools & Machines</button>
+                <button onclick="filterCategory('fertilizer')" class="px-8 py-3 border rounded-3xl font-medium">Fertilizers</button>
+                <button onclick="filterCategory('produce')" class="px-8 py-3 border rounded-3xl font-medium">Fresh Produce</button>
+                <button onclick="filterCategory('animal')" class="px-8 py-3 border rounded-3xl font-medium">Animal Products</button>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8" id="shop-grid"></div>
+    </section>
+
+    <!-- SUSTAINABLE FARMING -->
+    <section id="sustainable" class="max-w-7xl mx-auto px-6 py-20">
+        <h2 class="text-5xl font-bold logo-font mb-10">Sustainable Farming Practices</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="sustainable-grid"></div>
+    </section>
+
+    <!-- MARKET PRICES -->
+    <section id="prices" class="max-w-7xl mx-auto px-6 py-20">
+        <h2 class="text-5xl font-bold logo-font mb-10">Market Prices Today (April 2026)</h2>
+        <div class="overflow-x-auto bg-white rounded-3xl shadow">
+            <table class="w-full" id="prices-table">
+                <thead class="bg-green-50">
+                    <tr>
+                        <th class="px-8 py-5 text-left">Crop</th>
+                        <th class="px-8 py-5 text-left">Unit</th>
+                        <th class="px-8 py-5 text-left">Blantyre</th>
+                        <th class="px-8 py-5 text-left">Lilongwe</th>
+                        <th class="px-8 py-5 text-left">Mzuzu</th>
+                        <th class="px-8 py-5 text-left">Updated</th>
+                    </tr>
+                </thead>
+                <tbody id="prices-body" class="divide-y"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- CONTACT US SECTION -->
+    <section class="bg-green-900 text-white py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-5xl font-bold logo-font mb-6">Get In Touch</h2>
+                    <p class="text-green-100 text-lg mb-8">Have questions about products, prices, or farming advice? Our team is ready to help Malawi farmers.</p>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <span class="text-3xl">📍</span>
+                            <div>
+                                <p class="font-medium">Lilongwe Head Office</p>
+                                <p class="text-green-200">Area 3 Lilongwe, Malawi</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-3xl">📞</span>
+                            <div>
+                                <p class="font-medium">Call Us</p>
+                                <p class="text-green-200">+265 992 961 209/+265 883 944 589</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-3xl">✉️</span>
+                            <div>
+                                <p class="font-medium">Email</p>
+                                <p class="text-green-200">info@greenpulseagriculture.mw</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10">
+                    <form id="contact-form" onsubmit="handleContact(event)" class="space-y-6">
+                        <input type="text" placeholder="Your Name" class="w-full bg-white/10 border border-white/30 rounded-3xl px-6 py-4 text-white placeholder:text-green-200 focus:outline-none focus:border-white">
+                        <input type="tel" placeholder="Phone Number" class="w-full bg-white/10 border border-white/30 rounded-3xl px-6 py-4 text-white placeholder:text-green-200 focus:outline-none focus:border-white">
+                        <textarea placeholder="How can we help you today?" rows="5" class="w-full bg-white/10 border border-white/30 rounded-3xl px-6 py-4 text-white placeholder:text-green-200 focus:outline-none focus:border-white"></textarea>
+                        <button type="submit" class="w-full bg-white text-green-900 font-semibold py-5 rounded-3xl hover:bg-green-100 transition">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="custom-logo">
+                    <div class="square"></div>
+                    <div class="triangle"></div>
+                </div>
+            </div>
+            <h2 class="logo-font text-3xl">GreenPulse Agriculture</h2>
+            <p class="text-gray-400 mt-2">Lilongwe, Malawi • Empowering farmers and agribusinesses in Malawi</p>
+            <p class="text-xs text-gray-500 mt-10">© 2026 GreenPulse Agriculture. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[200]">
+        <div class="bg-white rounded-3xl p-10 max-w-md w-full mx-4">
+            <h3 class="text-3xl font-bold mb-8 text-center">Welcome Back</h3>
+            <input type="email" id="login-email" placeholder="Email or Phone" class="w-full border rounded-3xl px-6 py-4 mb-4 focus:outline-none focus:border-green-500">
+            <input type="password" id="login-password" placeholder="Password" class="w-full border rounded-3xl px-6 py-4 mb-6 focus:outline-none focus:border-green-500">
+            <button onclick="login()" class="w-full bg-green-600 text-white py-5 rounded-3xl font-semibold mb-4">Log In</button>
+            <p class="text-center text-sm text-gray-500">Don't have an account? <span onclick="switchToSignup()" class="text-green-600 cursor-pointer font-medium">Sign Up</span></p>
+            <button onclick="closeLoginModal()" class="absolute top-6 right-6 text-3xl text-gray-400 hover:text-gray-600">×</button>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[200]">
+        <div class="bg-white rounded-3xl p-10 max-w-md w-full mx-4">
+            <h3 class="text-3xl font-bold mb-8 text-center">Join</h3>
+            <input type="text" placeholder="Full Name" class="w-full border rounded-3xl px-6 py-4 mb-4 focus:outline-none focus:border-green-500">
+            <input type="tel" placeholder="Phone Number" class="w-full border rounded-3xl px-6 py-4 mb-4 focus:outline-none focus:border-green-500">
+            <input type="email" placeholder="Email" class="w-full border rounded-3xl px-6 py-4 mb-6 focus:outline-none focus:border-green-500">
+            <button onclick="signup()" class="w-full bg-green-600 text-white py-5 rounded-3xl font-semibold">Create Free Account</button>
+            <p class="text-center text-xs text-gray-500 mt-6">By signing up, you agree to our Terms &amp; Privacy Policy</p>
+            <button onclick="closeSignupModal()" class="absolute top-6 right-6 text-3xl text-gray-400 hover:text-gray-600">×</button>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="hidden fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-[100] flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h3 class="text-2xl font-semibold">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-4xl">×</button>
+        </div>
+        <div id="cart-items" class="flex-1 p-6 overflow-auto"></div>
+        <div class="p-6 border-t">
+            <div class="flex justify-between text-xl font-bold mb-6">
+                <span>Total</span>
+                <span id="cart-total">MK 0</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-green-600 text-white py-5 rounded-3xl text-xl">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // === ALL MAJOR CROPS IN MALAWI ===
+        const cropsData = [
+            {name:"Maize (Chimanga)", emoji:"🌽", region:"All districts", summary:"Main staple crop"},
+            {name:"Cassava (Chinangwa)", emoji:"🥔", region:"Southern & Central", summary:"Drought resistant"},
+            {name:"Groundnuts (Mtedza)", emoji:"🥜", region:"All regions", summary:"Cash & soil improving crop"},
+            {name:"Tobacco (Fodya)", emoji:"🍃", region:"Central & Northern", summary:"Major export cash crop"},
+            {name:"Rice", emoji:"🌾", region:"Karonga, Nkhotakota", summary:"Irrigated lowlands"},
+            {name:"Beans & Soya Beans", emoji:"🫘", region:"Dedza, Ntcheu", summary:"Protein rich legumes"},
+            {name:"Sweet Potatoes", emoji:"🍠", region:"Dedza, Rumphi", summary:"Nutritious tubers"},
+            {name:"Irish Potatoes", emoji:"🥔", region:"Dedza, Ntcheu", summary:"High value crop"},
+            {name:"Sorghum & Millet", emoji:"🌾", region:"Chikwawa, Nsanje", summary:"Drought tolerant"},
+            {name:"Cotton", emoji:"🌱", region:"Chikwawa, Salima", summary:"Industrial crop"},
+            {name:"Sugarcane", emoji:"🌿", region:"Salima, Chikwawa", summary:"Cash crop for sugar"},
+            {name:"Bananas", emoji:"🍌", region:"Southern Region", summary:"Fruit crop"}
+        ];
+
+        // === LIVESTOCK ===
+        const livestockData = [
+            {name:"Poultry (Chickens)", emoji:"🐔", summary:"Layers and broilers - most common"},
+            {name:"Goats", emoji:"🐐", summary:"  Milk & Meat - very profitable"},
+            {name:"Cattle", emoji:"🐄", summary:"Zebu and dairy breeds"},
+            {name:"Pigs", emoji:"🐖", summary:"Growing rapidly"},
+            {name:"Sheep", emoji:"🐑", summary:"Small but increasing"}
+        ];
+
+        // === SHOP ITEMS (with animal & produce from previous versions) ===
+        let shopProducts = [
+            {id:101, name:"Hybrid Maize Seed (10kg)", category:"seeds", price:122500, emoji:"🌽", description:"High yield, drought tolerant"},
+            {id:102, name:"Improved Groundnut Seed (5kg)", category:"seeds", price:72000, emoji:"🥜", description:"Rosette virus resistant"},
+            {id:103, name:"Cassava Cuttings (50 stems)", category:"seeds", price:40000, emoji:"🥔", description:"High starch variety"},
+            {id:104, name:"Heavy Duty Hand Hoe", category:"tools", price:12000, emoji:"🪓", description:"Strong steel blade"},
+            {id:105, name:"Knapsack Sprayer 16L", category:"tools", price:72500, emoji:"🧴", description:"Best for pesticides"},
+            {id:106, name:"NPK 23-21-0 Fertilizer (50kg)", category:"fertilizer", price:175000, emoji:"🧪", description:"Top dressing fertilizer"},
+            {id:107, name:"Urea Fertilizer (50kg)", category:"fertilizer", price:189500, emoji:"🧪", description:"Nitrogen rich"},
+            {id:108, name:"DAP Fertilizer (50kg)", category:"fertilizer", price:169500, emoji:"🧪", description:"Planting fertilizer"},
+            {id:109, name:"Fresh Cassava Roots (10kg)", category:"produce", price:12000, emoji:"🥔", description:"Freshly harvested"},
+            {id:110, name:"Sweet Potatoes (50kg)", category:"produce", price:42000, emoji:"🍠", description:"Local orange-fleshed"},
+            {id:111, name:"Fresh Eggs (30 tray)", category:"animal", price:15000, emoji:"🥚", description:"Farm fresh chicken eggs"},
+            {id:112, name:"Day Old Chicks (Broiler, 10 pcs)", category:"animal", price:25000, emoji:"🐥", description:"High quality broiler chicks"},
+            {id:113, name:"Fresh Milk (20 litres)", category:"animal", price:20000, emoji:"🥛", description:"Pasteurized cow milk"},
+            {id:114, name:"Drip Irrigation Kit (100m)", category:"tools", price:150000, emoji:"💧", description:"Water efficient"}
+        ];
+
+        // === SUSTAINABLE PRACTICES ===
+        const sustainableData = [
+            {title:"Conservation Agriculture", desc:"Minimal tillage, crop rotation, permanent soil cover"},
+            {title:"Agroforestry", desc:"Gliricidia and Tephrosia for natural nitrogen"},
+            {title:"Composting & Pit Planting", desc:"Restore soil health"},
+            {title:"Intercropping (Mbili Mbili)", desc:"Maize + legumes system"},
+            {title:"Drip Irrigation & Mulching", desc:"Water conservation"}
+        ];
+
+        let cart = [];
+
+        // Render Functions (unchanged except shop)
+        function renderCrops() {
+            document.getElementById('crop-grid').innerHTML = cropsData.map(c => `
+                <div class="bg-white rounded-3xl p-6 hover:shadow-xl border border-transparent hover:border-green-300">
+                    <div class="text-6xl mb-4">${c.emoji}</div>
+                    <h4 class="font-semibold text-xl">${c.name}</h4>
+                    <p class="text-green-600 text-sm">${c.region}</p>
+                    <p class="mt-3 text-gray-600">${c.summary}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderLivestock() {
+            document.getElementById('livestock-grid').innerHTML = livestockData.map(l => `
+                <div class="bg-white rounded-3xl p-8 hover:shadow-xl">
+                    <div class="text-6xl mb-6">${l.emoji}</div>
+                    <h4 class="font-semibold text-xl">${l.name}</h4>
+                    <p class="mt-4 text-gray-600">${l.summary}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderShop(category = 'all') {
+            const filtered = category === 'all' ? shopProducts : shopProducts.filter(p => p.category === category);
+            document.getElementById('shop-grid').innerHTML = filtered.map(p => `
+                <div class="bg-white border rounded-3xl p-6 hover:shadow-xl transition">
+                    <div class="text-7xl text-center mb-6">${p.emoji}</div>
+                    <h5 class="font-semibold">${p.name}</h5>
+                    <p class="text-sm text-gray-500 mt-2">${p.description}</p>
+                    <div class="mt-6 flex justify-between items-end">
+                        <span class="text-3xl font-bold text-green-700">MK ${p.price.toLocaleString()}</span>
+                        <button onclick="addToCart(${p.id}, '${p.name}', ${p.price}, '${p.emoji}')" class="bg-green-600 text-white px-6 py-3 rounded-3xl text-sm">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSustainable() {
+            document.getElementById('sustainable-grid').innerHTML = sustainableData.map(s => `
+                <div class="bg-white rounded-3xl p-8 hover:shadow-xl">
+                    <div class="text-5xl mb-4">♻</div>
+                    <h4 class="font-semibold text-xl">${s.title}</h4>
+                    <p class="mt-4 text-gray-600">${s.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderPrices() {
+            const tbody = document.getElementById('prices-body');
+            // (pricesData array remains the same as original)
+            tbody.innerHTML = pricesData.map(p => `
+                <tr class="hover:bg-green-50">
+                    <td class="px-8 py-5 font-medium">${p.emoji} ${p.crop}</td>
+                    <td class="px-8 py-5 text-gray-600">${p.unit}</td>
+                    <td class="px-8 py-5 font-semibold">MK ${p.blantyre}</td>
+                    <td class="px-8 py-5 font-semibold">MK ${p.lilongwe}</td>
+                    <td class="px-8 py-5 font-semibold">MK ${p.mzuzu}</td>
+                    <td class="px-8 py-5 text-xs text-gray-500">${p.updated}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Modal Functions
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('signup-modal').classList.add('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function showSignupModal() {
+            document.getElementById('signup-modal').classList.remove('hidden');
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signup-modal').classList.add('hidden');
+        }
+
+        function switchToSignup() {
+            closeLoginModal();
+            showSignupModal();
+        }
+
+        function login() {
+            alert("✅ Login successful! Welcome back.");
+            closeLoginModal();
+        }
+
+        function signup() {
+            alert("🎉 Account created successfully! Welcome to GreenPulse Agriculture.");
+            closeSignupModal();
+        }
+
+        function handleContact(e) {
+            e.preventDefault();
+            alert("✅ Thank you! Your message has been received. We'll contact you soon.");
+            document.getElementById('contact-form').reset();
+        }
+
+        // Cart Functions (same as before)
+        function addToCart(id, name, price, emoji) {
+            const existing = cart.find(item => item.id === id);
+            if (existing) existing.quantity += 1;
+            else cart.push({id, name, price, emoji, quantity: 1});
+            updateCartCount();
+            alert(`${name} added to cart!`);
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('hidden');
+            if (!sidebar.classList.contains('hidden')) renderCart();
+        }
+
+        function renderCart() {
+            let total = 0;
+            const html = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                return `<div class="flex justify-between mb-6"><div>${item.emoji} ${item.name}</div><div class="font-semibold">MK ${itemTotal.toLocaleString()}</div></div>`;
+            }).join('');
+            document.getElementById('cart-items').innerHTML = html || '<p class="text-center text-gray-400 py-10">Your cart is empty</p>';
+            document.getElementById('cart-total').textContent = `MK ${total.toLocaleString()}`;
+        }
+
+        function checkout() {
+            if (cart.length === 0) return alert("Cart is empty");
+            alert("✅ Order Placed Successfully!\nThank you for shopping at GreenPulse Agriculture.");
+            cart = [];
+            updateCartCount();
+            toggleCart();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('#shop-filters button').forEach(b => b.classList.remove('active', 'border-green-600', 'bg-green-50'));
+            const activeBtn = Array.from(document.querySelectorAll('#shop-filters button')).find(b => 
+                (cat === 'all' && b.textContent.includes('All')) || b.getAttribute('onclick').includes(`'${cat}'`)
+            );
+            if (activeBtn) activeBtn.classList.add('active', 'border-green-600', 'bg-green-50');
+            renderShop(cat);
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderCrops();
+            renderLivestock();
+            renderSustainable();
+            renderShop();
+            renderPrices();
+            console.log("%c✅ GreenPulse Agriculture - Enhanced with Login, Sign Up & Contact", "color:#22c55e; font-weight:bold");
+        };
+    </script>
+
+</body>
+</html>

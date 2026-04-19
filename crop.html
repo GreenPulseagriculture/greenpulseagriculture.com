@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crops of Malawi | GreenPulse Agriculture</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        .logo-font { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        .nav-link:after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 3px; 
+            bottom: -2px; 
+            left: 0; 
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after { 
+            width: 100%; 
+        }
+
+        /* Custom Logo */
+        .custom-logo {
+            position: relative;
+            width: 52px;
+            height: 52px;
+        }
+        .custom-logo .square {
+            width: 33px;
+            height: 33px;
+            background: #2c3e50;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            z-index: 2;
+        }
+        .custom-logo .triangle {
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            border-right: 30px solid #22c55e;
+            left: 23px;
+            border-radius: 20px;
+            z-index: 1;
+            bottom: 8px;
+            transform: rotate(130deg);
+        }
+
+        .crop-card {
+            transition: all 0.3s ease;
+        }
+        .crop-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            animation: fadeInScale 0.3s ease forwards;
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- NAVBAR - Exact header from original -->
+    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="custom-logo">
+                        <div class="square"></div>
+                        <div class="triangle"></div>
+                    </div>
+                    <div>
+                        <h1 class="logo-font text-4xl font-semibold tracking-tight">
+                            <span class="text-gray-800">Green</span><span class="text-green-600">Pulse</span>
+                        </h1>
+                        <p class="text-xs text-green-600 -mt-1">AGRICULTURE</p>
+                    </div>
+                    <span class="ml-3 text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Malawi</span>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="crop.html" class="nav-link text-green-600 font-semibold">Crops</a>
+                    <a href="livestock.html" class="nav-link">Livestock</a>
+                    <a href="shop.html" class="nav-link">Shop</a>
+                    <a href="sustainable.html" class="nav-link">Practices</a>
+                    <a href="prices.html" class="nav-link">Marketplace</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative p-3 hover:bg-green-100 rounded-2xl transition-colors">
+                        🛒 
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">☰</button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t py-6 px-6 flex flex-col gap-4 text-base">
+                <a href="index.html" onclick="toggleMobileMenu()" class="py-2">🏠 Home</a>
+                <a href="crop.html" onclick="toggleMobileMenu()" class="py-2 text-green-600 font-semibold">🌾 Crops</a>
+                <a href="livestock.html" onclick="toggleMobileMenu()" class="py-2">🐄 Livestock</a>
+                <a href="shop.html" onclick="toggleMobileMenu()" class="py-2">🛒 Shop</a>
+                <a href="sustainable.html" onclick="toggleMobileMenu()" class="py-2">♻ Practices</a>
+                <a href="prices.html" onclick="toggleMobileMenu()" class="py-2">📈 Marketplace</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <h1 class="text-5xl font-bold logo-font mb-2">Crops of Malawi</h1>
+        <p class="text-gray-600 text-lg">Discover the major food and cash crops that sustain Malawi's agriculture and economy</p>
+
+        <!-- Search -->
+        <div class="mt-8 mb-10">
+            <input 
+                type="text" 
+                id="search-input"
+                onkeyup="filterCrops()"
+                placeholder="Search crops... (e.g. maize, tobacco, cassava)"
+                class="w-full max-w-md px-6 py-4 border rounded-3xl focus:outline-none focus:border-green-500">
+        </div>
+
+        <!-- Crops Grid -->
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8" id="crops-grid"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
+        <div class="modal bg-white max-w-2xl w-full mx-4 rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div id="modal-emoji" class="text-8xl"></div>
+                    <button onclick="closeModal()" 
+                            class="text-4xl leading-none text-gray-400 hover:text-gray-600">×</button>
+                </div>
+                
+                <h2 id="modal-name" class="text-4xl font-bold logo-font"></h2>
+                <div id="modal-category" class="inline-block px-4 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full mt-3"></div>
+                
+                <div class="mt-8 text-gray-700 leading-relaxed" id="modal-description"></div>
+            </div>
+            
+            <div class="bg-gray-50 px-8 py-6 border-t flex justify-end">
+                <button onclick="closeModal()" 
+                        class="px-8 py-3 bg-gray-800 text-white rounded-3xl font-medium hover:bg-black transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive list of crops grown in Malawi with rich descriptions
+        let malawiCrops = [
+            {
+                id: 1,
+                name: "Maize",
+                emoji: "🌽",
+                category: "Staple Food",
+                description: "Maize is the most important staple crop in Malawi, occupying nearly 60% of all cultivated land. It is grown by almost every smallholder farmer and forms the basis of the national diet (nsima). High-yielding hybrid varieties and drought-tolerant varieties like DKC and SC are widely used. Maize production is highly weather-dependent and central to Malawi’s food security."
+            },
+            {
+                id: 2,
+                name: "Tobacco",
+                emoji: "🌿",
+                category: "Cash Crop",
+                description: "Tobacco is Malawi’s most valuable export crop and a major foreign exchange earner. Burley tobacco is the dominant type, grown mainly in the central and northern regions (Kasungu, Lilongwe, Mzimba, Dowa). It provides income for hundreds of thousands of smallholder farmers but faces challenges from global anti-smoking campaigns."
+            },
+            {
+                id: 3,
+                name: "Cassava",
+                emoji: "🥔",
+                category: "Root Crop",
+                description: "Cassava is a vital drought-resistant food crop, especially important in southern Malawi and lakeshore districts. It serves as a reliable food security crop during maize shortages. Both sweet and bitter varieties are grown, and it is used for flour, chips, and animal feed."
+            },
+            {
+                id: 4,
+                name: "Groundnuts",
+                emoji: "🥜",
+                category: "Legume",
+                description: "Groundnuts (peanuts) are a major food and cash crop grown across Malawi. They are rich in protein and oil. Farmers use them for home consumption, peanut butter, and oil extraction. Improved varieties resistant to rosette disease have significantly increased yields."
+            },
+            {
+                id: 5,
+                name: "Tea",
+                emoji: "🍵",
+                category: "Cash Crop",
+                description: "Tea is grown in the cool, high-rainfall areas of Mulanje and Thyolo districts in southern Malawi. Malawi is one of Africa’s leading tea producers. The industry provides employment to thousands of workers and generates significant export revenue."
+            },
+            {
+                id: 6,
+                name: "Sugarcane",
+                emoji: "🌱",
+                category: "Cash Crop",
+                description: "Sugarcane is mainly cultivated in the Shire Valley (Chikwawa and Nsanje) and parts of Nkhotakota. It is processed into sugar at Illovo Sugar factories. Sugarcane farming supports both large estates and outgrower schemes."
+            },
+            {
+                id: 7,
+                name: "Sweet Potatoes",
+                emoji: "🍠",
+                category: "Root Crop",
+                description: "Sweet potatoes are widely grown throughout Malawi and are rich in vitamins, especially vitamin A. They mature quickly and serve as an important food crop during the hungry season. Orange-fleshed varieties are promoted for nutrition improvement."
+            },
+            {
+                id: 8,
+                name: "Rice",
+                emoji: "🌾",
+                category: "Staple Food",
+                description: "Rice is grown in irrigated schemes and wetland areas, particularly in Karonga, Salima, Nkhotakota, and the Shire Valley. It is both a food crop and a cash crop. Popular varieties include Faya and Supa."
+            },
+            {
+                id: 9,
+                name: "Beans",
+                emoji: "🫘",
+                category: "Legume",
+                description: "Common beans are the most important legume crop after groundnuts. They are grown in highland areas like Dedza, Ntcheu, and Rumphi. Beans provide essential protein when combined with maize and help improve soil fertility through nitrogen fixation."
+            },
+            {
+                id: 10,
+                name: "Sorghum",
+                emoji: "🌾",
+                category: "Staple Food",
+                description: "Sorghum is a drought-tolerant cereal crop grown mainly in drier parts of southern Malawi (Chikwawa, Nsanje) and some northern districts. It is used for making porridge, traditional beer (kachasu), and as a maize substitute during shortages."
+            },
+            {
+                id: 11,
+                name: "Soybean",
+                emoji: "🫘",
+                category: "Legume",
+                description: "Soybean production is rapidly expanding due to demand from the animal feed industry and oil extraction. It is also used for human consumption. Soybean improves soil fertility and is promoted as a rotational crop with maize."
+            },
+            {
+                id: 12,
+                name: "Irish Potatoes",
+                emoji: "🥔",
+                category: "Vegetable",
+                description: "Irish potatoes are grown in cooler highland districts such as Dedza, Ntcheu, Rumphi, and Bvumbwe. They are an important cash crop and vegetable for both rural and urban markets."
+            },
+            {
+                id: 13,
+                name: "Cotton",
+                emoji: "🌱",
+                category: "Cash Crop",
+                description: "Cotton is traditionally grown in the Shire Valley and lakeshore areas. It provides raw material for the textile industry and income for smallholder farmers, though production has declined in recent years."
+            },
+            {
+                id: 14,
+                name: "Coffee",
+                emoji: "☕",
+                category: "Cash Crop",
+                description: "Coffee is grown in northern districts (Chitipa, Rumphi) and some parts of southern Malawi. Arabica coffee is the main type. It is a high-value export crop that provides good income when well managed."
+            },
+            {
+                id: 15,
+                name: "Pigeon Peas",
+                emoji: "🌿",
+                category: "Legume",
+                description: "Pigeon peas are popular in southern Malawi. They are hardy, improve soil fertility through nitrogen fixation, and provide food (dhal) and income. They are often intercropped with maize or cassava."
+            },
+            {
+                id: 16,
+                name: "Bananas",
+                emoji: "🍌",
+                category: "Fruit",
+                description: "Bananas are grown in many parts of Malawi, especially in Thyolo, Mulanje, Nkhata Bay, and Karonga. They are consumed locally and sold as a cash crop. Both dessert and cooking banana varieties are common."
+            },
+            {
+                id: 17,
+                name: "Sunflower",
+                emoji: "🌻",
+                category: "Oilseed",
+                description: "Sunflower is an emerging oilseed crop promoted as an alternative to tobacco. It is grown in central Malawi and used for cooking oil production and animal feed."
+            },
+            {
+                id: 18,
+                name: "Millet",
+                emoji: "🌾",
+                category: "Staple Food",
+                description: "Finger millet and pearl millet are grown in drier areas. They are highly nutritious and drought-resistant. Millet is used for porridge and traditional beer making."
+            }
+        ];
+
+        function renderCrops(crops) {
+            const container = document.getElementById('crops-grid');
+            container.innerHTML = crops.map(crop => `
+                <div onclick="showModal(${crop.id})" 
+                     class="crop-card bg-white border border-gray-200 rounded-3xl p-6 hover:border-green-300 cursor-pointer">
+                    <div class="text-7xl text-center mb-6">${crop.emoji}</div>
+                    <h5 class="font-semibold text-xl leading-tight">${crop.name}</h5>
+                    <p class="text-sm text-gray-500 mt-3 line-clamp-3">${crop.description}</p>
+                    <div class="mt-6 pt-4 border-t text-xs uppercase tracking-widest text-gray-400">
+                        ${crop.category}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showModal(id) {
+            const crop = malawiCrops.find(c => c.id === id);
+            if (!crop) return;
+
+            document.getElementById('modal-emoji').textContent = crop.emoji;
+            document.getElementById('modal-name').textContent = crop.name;
+            document.getElementById('modal-category').textContent = crop.category;
+            document.getElementById('modal-description').innerHTML = `
+                <p class="text-lg leading-relaxed">${crop.description}</p>
+            `;
+
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function filterCrops() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                renderCrops(malawiCrops);
+                return;
+            }
+
+            const filtered = malawiCrops.filter(crop => 
+                crop.name.toLowerCase().includes(searchTerm) || 
+                crop.description.toLowerCase().includes(searchTerm) ||
+                crop.category.toLowerCase().includes(searchTerm)
+            );
+            
+            renderCrops(filtered);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function toggleCart() {
+            alert("Cart feature coming soon on this page!");
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderCrops(malawiCrops);
+        };
+    </script>
+
+</body>
+</html>

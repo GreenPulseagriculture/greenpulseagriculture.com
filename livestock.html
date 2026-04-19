@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock of Malawi | GreenPulse Agriculture</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        .logo-font { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        .livestock-card {
+            transition: all 0.3s ease;
+        }
+        .livestock-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            animation: fadeInScale 0.3s ease forwards;
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Navigation underline effect */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link:after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 3px; 
+            bottom: -2px; 
+            left: 0; 
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after { 
+            width: 100%; 
+        }
+
+        /* Custom Logo */
+        .custom-logo {
+            position: relative;
+            width: 52px;
+            height: 52px;
+        }
+        .custom-logo .square {
+            width: 33px;
+            height: 33px;
+            background: #2c3e50;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            z-index: 2;
+        }
+        .custom-logo .triangle {
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            border-right: 30px solid #22c55e;
+            left: 23px;
+            border-radius: 20px;
+            z-index: 1;
+            bottom: 8px;
+            transform: rotate(130deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- NAVBAR - Exact header from original design -->
+    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="custom-logo">
+                        <div class="square"></div>
+                        <div class="triangle"></div>
+                    </div>
+                    <div>
+                        <h1 class="logo-font text-4xl font-semibold tracking-tight">
+                            <span class="text-gray-800">Green</span><span class="text-green-600">Pulse</span>
+                        </h1>
+                        <p class="text-xs text-green-600 -mt-1">AGRICULTURE</p>
+                    </div>
+                    <span class="ml-3 text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Malawi</span>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="crop.html" class="nav-link">Crops</a>
+                    <a href="livestock.html" class="nav-link text-green-600 font-semibold">Livestock</a>
+                    <a href="shop.html" class="nav-link">Shop</a>
+                    <a href="sustainable.html" class="nav-link">Practices</a>
+                    <a href="prices.html" class="nav-link">Marketplace</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative p-3 hover:bg-green-100 rounded-2xl transition-colors">
+                        🛒 
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">☰</button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t py-6 px-6 flex flex-col gap-4 text-base">
+                <a href="index.html" onclick="toggleMobileMenu()" class="py-2">🏠 Home</a>
+                <a href="crop.html" onclick="toggleMobileMenu()" class="py-2">🌾 Crops</a>
+                <a href="livestock.html" onclick="toggleMobileMenu()" class="py-2 text-green-600 font-semibold">🐄 Livestock</a>
+                <a href="shop.html" onclick="toggleMobileMenu()" class="py-2">🛒 Shop</a>
+                <a href="sustainable.html" onclick="toggleMobileMenu()" class="py-2">♻ Sustainable Farming</a>
+                <a href="prices.html" onclick="toggleMobileMenu()" class="py-2">📈 Prices</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <h1 class="text-5xl font-bold logo-font mb-2">Livestock of Malawi</h1>
+        <p class="text-gray-600 text-lg">Major animals raised by smallholder farmers and commercial producers across the country</p>
+
+        <!-- Search -->
+        <div class="mt-8 mb-10">
+            <input 
+                type="text" 
+                id="search-input"
+                onkeyup="filterLivestock()"
+                placeholder="Search livestock... (e.g. cattle, goats, chickens)"
+                class="w-full max-w-md px-6 py-4 border rounded-3xl focus:outline-none focus:border-green-500">
+        </div>
+
+        <!-- Livestock Grid -->
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8" id="livestock-grid"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
+        <div class="modal bg-white max-w-2xl w-full mx-4 rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div id="modal-emoji" class="text-8xl"></div>
+                    <button onclick="closeModal()" 
+                            class="text-4xl leading-none text-gray-400 hover:text-gray-600">×</button>
+                </div>
+                
+                <h2 id="modal-name" class="text-4xl font-bold logo-font"></h2>
+                <div id="modal-category" class="inline-block px-4 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full mt-3"></div>
+                
+                <div class="mt-8 text-gray-700 leading-relaxed" id="modal-description"></div>
+            </div>
+            
+            <div class="bg-gray-50 px-8 py-6 border-t flex justify-end">
+                <button onclick="closeModal()" 
+                        class="px-8 py-3 bg-gray-800 text-white rounded-3xl font-medium hover:bg-black transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Livestock data with extended descriptions
+        let malawiLivestock = [
+            {
+                id: 1,
+                name: "Cattle",
+                emoji: "🐄",
+                category: "Ruminant",
+                description: "Cattle are the most important livestock in Malawi's agricultural economy. The majority are indigenous Malawi Zebu, which are well-adapted to local conditions. They provide meat, milk, draught power for ploughing, and serve as a form of savings and wealth storage for rural households. Commercial dairy farming is growing in areas like Blantyre, Lilongwe, and Mzuzu with crossbred animals."
+            },
+            {
+                id: 2,
+                name: "Goats",
+                emoji: "🐐",
+                category: "Ruminant",
+                description: "Goats are the second most important livestock after chickens. The dominant breed is the Small East African goat. They are highly valued because they reproduce quickly, require minimal feed, and can survive in harsh conditions. Goat meat (chevon) is in high demand, and selling goats provides quick cash for school fees, medical bills, and emergencies."
+            },
+            {
+                id: 3,
+                name: "Sheep",
+                emoji: "🐑",
+                category: "Ruminant",
+                description: "Sheep are less common than goats but are kept by many farmers, especially in the southern and central regions. Most are indigenous hair sheep. They are raised mainly for meat and occasionally for wool in some highland areas. Sheep are often kept together with goats."
+            },
+            {
+                id: 4,
+                name: "Pigs",
+                emoji: "🐖",
+                category: "Monogastric",
+                description: "Pig production has increased significantly in recent years. Farmers raise both indigenous pigs and improved exotic breeds such as Large White, Landrace, and Duroc. Pigs grow fast and convert feed efficiently, making them a good income source, especially for farmers near urban markets in Blantyre, Lilongwe, and Mzuzu."
+            },
+            {
+                id: 5,
+                name: "Chickens",
+                emoji: "🐔",
+                category: "Poultry",
+                description: "Chickens are the most widespread livestock in Malawi, with both village (indigenous) chickens and commercial broilers and layers. Village chickens are kept under free-range systems and provide eggs and meat for home consumption and sale. Commercial poultry farms are expanding rapidly to meet the growing demand for chicken meat and eggs in urban areas."
+            },
+            {
+                id: 6,
+                name: "Ducks",
+                emoji: "🦆",
+                category: "Poultry",
+                description: "Ducks are commonly raised near water sources such as rivers, dams, and lakes. They are more resistant to some diseases than chickens and require less intensive management. Duck meat and eggs are becoming increasingly popular in urban markets."
+            },
+            {
+                id: 7,
+                name: "Guinea Fowls",
+                emoji: "🐦",
+                category: "Poultry",
+                description: "Guinea fowls are gaining popularity due to their hardiness, ability to control pests, and unique-tasting meat. They are often raised in free-range systems and are valued for both household consumption and sale during festive seasons."
+            },
+            {
+                id: 8,
+                name: "Rabbits",
+                emoji: "🐰",
+                category: "Small Livestock",
+                description: "Rabbit farming is expanding rapidly because rabbits reproduce very fast, need little space, and produce high-quality, lean meat. They are ideal for youth and women farmers as a source of additional income and nutrition."
+            },
+            {
+                id: 9,
+                name: "Turkeys",
+                emoji: "🦃",
+                category: "Poultry",
+                description: "Turkeys are kept in smaller numbers compared to chickens. They are mainly raised for meat, especially during Christmas and other festive periods. Most turkeys in Malawi are of local or mixed breeds."
+            },
+            {
+                id: 10,
+                name: "Bees",
+                emoji: "🐝",
+                category: "Apiculture",
+                description: "Beekeeping (apiculture) is practiced widely across Malawi using both traditional and modern hives. It provides honey and beeswax, which are sold locally and exported. Beekeeping is environmentally friendly and helps in pollination of crops."
+            },
+            {
+                id: 11,
+                name: "Fish (Tilapia & Catfish)",
+                emoji: "🐟",
+                category: "Aquaculture",
+                description: "Fish farming has grown significantly in Malawi. Tilapia and catfish are the main species cultured in ponds and cages. Aquaculture provides a sustainable source of protein and is supported by government and NGO programs to improve food and nutrition security."
+            }
+        ];
+
+        let currentLivestock = null;
+
+        function renderLivestock(items) {
+            const container = document.getElementById('livestock-grid');
+            container.innerHTML = items.map(item => `
+                <div onclick="showModal(${item.id})" 
+                     class="livestock-card bg-white border border-gray-200 rounded-3xl p-6 hover:border-green-300 cursor-pointer">
+                    <div class="text-7xl text-center mb-6">${item.emoji}</div>
+                    <h5 class="font-semibold text-xl leading-tight">${item.name}</h5>
+                    <p class="text-sm text-gray-500 mt-3 line-clamp-3">${item.description}</p>
+                    <div class="mt-6 pt-4 border-t text-xs uppercase tracking-widest text-gray-400">
+                        ${item.category}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showModal(id) {
+            const livestock = malawiLivestock.find(item => item.id === id);
+            if (!livestock) return;
+
+            currentLivestock = livestock;
+
+            document.getElementById('modal-emoji').textContent = livestock.emoji;
+            document.getElementById('modal-name').textContent = livestock.name;
+            document.getElementById('modal-category').textContent = livestock.category;
+            document.getElementById('modal-description').innerHTML = `
+                <p class="text-lg leading-relaxed">${livestock.description}</p>
+            `;
+
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function filterLivestock() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                renderLivestock(malawiLivestock);
+                return;
+            }
+
+            const filtered = malawiLivestock.filter(item => 
+                item.name.toLowerCase().includes(searchTerm) || 
+                item.description.toLowerCase().includes(searchTerm) ||
+                item.category.toLowerCase().includes(searchTerm)
+            );
+            
+            renderLivestock(filtered);
+        }
+
+        // Close modal when clicking outside the content
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function toggleCart() {
+            alert("Cart feature coming soon on Livestock page!");
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderLivestock(malawiLivestock);
+        };
+    </script>
+</body>
+</html>

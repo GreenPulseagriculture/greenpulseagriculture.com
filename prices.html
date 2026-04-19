@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace | GreenPulse Agriculture</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        .logo-font { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        .nav-link:after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 3px; 
+            bottom: -2px; 
+            left: 0; 
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after { 
+            width: 100%; 
+        }
+
+        .custom-logo {
+            position: relative;
+            width: 52px;
+            height: 52px;
+        }
+        .custom-logo .square {
+            width: 33px;
+            height: 33px;
+            background: #2c3e50;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            z-index: 2;
+        }
+        .custom-logo .triangle {
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            border-right: 30px solid #22c55e;
+            left: 23px;
+            border-radius: 20px;
+            z-index: 1;
+            bottom: 8px;
+            transform: rotate(130deg);
+        }
+
+        .market-card {
+            transition: all 0.3s ease;
+        }
+        .market-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        /* Lightbox styles */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+        }
+        #lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 210;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="custom-logo">
+                        <div class="square"></div>
+                        <div class="triangle"></div>
+                    </div>
+                    <div>
+                        <h1 class="logo-font text-4xl font-semibold tracking-tight">
+                            <span class="text-gray-800">Green</span><span class="text-green-600">Pulse</span>
+                        </h1>
+                        <p class="text-xs text-green-600 -mt-1">AGRICULTURE</p>
+                    </div>
+                    <span class="ml-3 text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Malawi</span>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="crop.html" class="nav-link">Crops</a>
+                    <a href="livestock.html" class="nav-link">Livestock</a>
+                    <a href="shop.html" class="nav-link">Shop</a>
+                    <a href="sustainable.html" class="nav-link">Practices</a>
+                    <a href="prices.html" class="nav-link text-green-600 font-semibold">Marketplace</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative p-3 hover:bg-green-100 rounded-2xl transition-colors">
+                        🛒 
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">☰</button>
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t py-6 px-6 flex flex-col gap-4 text-base">
+                <a href="index.html" onclick="toggleMobileMenu()" class="py-2">🏠 Home</a>
+                <a href="crop.html" onclick="toggleMobileMenu()" class="py-2">🌾 Crops</a>
+                <a href="livestock.html" onclick="toggleMobileMenu()" class="py-2">🐄 Livestock</a>
+                <a href="shop.html" onclick="toggleMobileMenu()" class="py-2">🛒 Shop</a>
+                <a href="sustainable.html" onclick="toggleMobileMenu()" class="py-2">♻ Practices</a>
+                <a href="prices.html" onclick="toggleMobileMenu()" class="py-2 text-green-600 font-semibold">📈 Marketplace</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10">
+            <div>
+                <h1 class="text-5xl font-bold logo-font mb-2">Marketplace</h1>
+                <p class="text-gray-600 text-lg">Buy and sell fresh produce, livestock, and farm products directly from Malawian farmers.</p>
+            </div>
+            <button onclick="showPostModal()" 
+                    class="mt-6 md:mt-0 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-3xl font-semibold flex items-center gap-3">
+                🌾 Post Your Produce (MK 10,000 fee)
+            </button>
+        </div>
+
+        <p class="text-sm text-gray-500 mb-8">
+            Small posting fee helps keep the platform free for browsing and supports farmers. All listings are moderated for quality.
+        </p>
+
+        <!-- Search -->
+        <div class="mb-10">
+            <input 
+                type="text" 
+                id="search-input"
+                onkeyup="filterListings()"
+                placeholder="Search marketplace... (e.g. maize, goats, tomatoes)"
+                class="w-full max-w-md px-6 py-4 border rounded-3xl focus:outline-none focus:border-green-500">
+        </div>
+
+        <!-- Marketplace Grid -->
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8" id="market-grid"></div>
+    </div>
+
+    <!-- Post Listing Modal -->
+    <div id="post-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-3xl max-w-md w-full mx-4 overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-5">Post Your Produce for Sale</h3>
+                
+                <div class="space-y-4">
+                    <input id="post-name" type="text" placeholder="Product name (e.g. Maize 50kg bag)" 
+                           class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500">
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <input id="post-price" type="text" placeholder="Price (MK)" 
+                               class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500">
+                        <input id="post-unit" type="text" placeholder="Unit (e.g. 50kg bag)" 
+                               class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500">
+                    </div>
+
+                    <textarea id="post-desc" rows="2" placeholder="Description and location (e.g. From Lilongwe, fresh harvest)"
+                              class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500"></textarea>
+
+                    <!-- Picture Upload Section for Sellers -->
+                    <div class="border-t pt-5">
+                        <h4 class="font-semibold text-base mb-3">📸 Upload Pictures of Your Produce</h4>
+                        <div class="border-2 border-dashed border-gray-300 rounded-3xl p-6 text-center">
+                            <input type="file" id="produce-images" accept="image/*" multiple 
+                                   class="hidden" onchange="previewImages(event)">
+                            <button onclick="document.getElementById('produce-images').click()" 
+                                    class="bg-white border border-green-600 text-green-600 hover:bg-green-50 px-6 py-3 rounded-3xl font-medium flex items-center gap-2 mx-auto">
+                                📷 Select Images
+                            </button>
+                            <p class="text-xs text-gray-500 mt-3">You can upload up to 5 photos (JPG/PNG)</p>
+                            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="border-t pt-5">
+                        <h4 class="font-semibold text-base mb-3">📱 Your Contact Details</h4>
+                        <div class="grid grid-cols-1 gap-3">
+                            <input id="seller-phone" type="tel" placeholder="Phone Number (with or without +265)" 
+                                   class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500">
+                            <input id="seller-whatsapp" type="tel" placeholder="WhatsApp Number (with or without +265)" 
+                                   class="w-full border rounded-3xl px-5 py-3 focus:outline-none focus:border-green-500">
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="bg-green-50 border border-green-200 rounded-3xl p-4 text-sm">
+                        <h4 class="font-semibold text-green-800 mb-2">💰 Payment Methods</h4>
+                        <div class="space-y-1">
+                            <div><span class="font-medium">TNM Mpamba:</span> <span class="font-mono">+265883944589</span></div>
+                            <div><span class="font-medium">Airtel Money:</span> <span class="font-mono">+265992961209</span></div>
+                            <div><span class="font-medium">National Bank:</span> <span class="font-mono">1008906765</span></div>
+                        </div>
+                        <p class="text-xs text-green-700 mt-3">
+                            Make deposits directly into these accounts. Send proof via WhatsApp +265 883 944 589.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fixed bottom bar -->
+            <div class="bg-gray-50 px-6 py-5 border-t flex justify-between items-center sticky bottom-0">
+                <div class="text-sm text-gray-500">
+                    Fee: <span class="font-semibold text-green-700">MK 10,000</span>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="closePostModal()" 
+                            class="px-6 py-3 text-gray-600 font-medium">Cancel</button>
+                    <button onclick="submitPost()" 
+                            class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-3xl font-semibold">
+                        Post Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Seller Modal -->
+    <div id="contact-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[110]">
+        <div class="bg-white rounded-3xl max-w-md w-full mx-4 overflow-hidden">
+            <div class="p-8">
+                <h3 class="text-2xl font-bold mb-1" id="modal-product-name"></h3>
+                <p class="text-gray-500 mb-6" id="modal-seller"></p>
+
+                <!-- Pictures display for buyers - now clickable -->
+                <div id="modal-images" class="grid grid-cols-2 gap-3 mb-6"></div>
+
+                <div id="contact-info" class="space-y-4"></div>
+            </div>
+            
+            <div class="bg-gray-50 px-8 py-6 border-t flex justify-end">
+                <button onclick="closeContactModal()" 
+                        class="px-8 py-3 bg-gray-700 text-white rounded-3xl font-semibold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for enlarged image viewing -->
+    <div id="lightbox" onclick="if(event.target === this) closeLightbox()">
+        <span id="lightbox-close" onclick="closeLightbox()">×</span>
+        <img id="lightbox-image" src="" alt="Enlarged produce photo">
+    </div>
+
+    <script>
+        let listings = [
+            { 
+                id: 1, 
+                name: "Fresh Maize (50kg bag)", 
+                emoji: "🌽", 
+                price: "45,000", 
+                unit: "50kg bag", 
+                location: "Lilongwe", 
+                seller: "Mr Chisi", 
+                phone: "0888123456", 
+                whatsapp: "0888123456",
+                images: ["https://www.farmworx.co.ke/why-its-profitable-selling-maize-to-ncpb-at-sh-4000-per-bag/",
+                    "https://www.agricoopnews.com/post/cp-produces-3-million-bags-of-maize"
+                ] 
+            },
+            { 
+                id: 2, 
+                name: "Live Goats (Mature)", 
+                emoji: "🐐", 
+                price: "135,000", 
+                unit: "per goat", 
+                location: "Blantyre", 
+                seller: "Harawa Livestock", 
+                phone: "0999123456", 
+                whatsapp: "0999123456",
+                images: [ ] 
+            },
+            { 
+                id: 3, 
+                name: "Groundnuts (Shelled, 50kg)", 
+                emoji: "🥜", 
+                price: "180,000", 
+                unit: "50kg bag", 
+                location: "Mzuzu", 
+                seller: "Northern Farmers Coop", 
+                phone: "0883987654", 
+                whatsapp: "0883987654",
+                images: [] 
+            },
+            { 
+                id: 4, 
+                name: "Rice (50kg)", 
+                emoji: "🌾", 
+                price: "180,000", 
+                unit: "50kg bag", 
+                location: "Karonga", 
+                seller: "Lindiwe rice farms", 
+                phone: "0992876543", 
+                whatsapp: "0992876543",
+                images:[   ]
+            },
+            { 
+                id: 5, 
+                name: "Fresh Tomatoes (40L bucket)", 
+                emoji: "🍅", 
+                price: "62,000", 
+                unit: "40L bucket", 
+                location: "Dedza", 
+                seller: "Mama's Garden", 
+                phone: "0883456789", 
+                whatsapp: "0883456789",
+                images: [ ] 
+            },
+            { 
+                id: 6, 
+                name: "Day Old Layer Chicks (50 pcs)", 
+                emoji: "🐥", 
+                price: "120,000", 
+                unit: "50 chicks", 
+                location: "Kasungu", 
+                seller: "Chilumbi Poultry", 
+                phone: "0998765432", 
+                whatsapp: "0998765432",
+                images: [] 
+            }
+        ];
+
+        let currentPostImages = [];
+
+        function renderListings(items) {
+            const container = document.getElementById('market-grid');
+            container.innerHTML = items.map(item => `
+                <div class="market-card bg-white border border-gray-200 rounded-3xl p-6 hover:border-green-300">
+                    <div class="text-7xl text-center mb-6">${item.emoji}</div>
+                    <h5 class="font-semibold text-xl">${item.name}</h5>
+                    <p class="text-sm text-gray-500 mt-1">${item.location} • ${item.seller}</p>
+                    <div class="mt-6 flex justify-between items-end">
+                        <div>
+                            <span class="text-3xl font-bold text-green-700">MK ${item.price}</span>
+                            <span class="text-sm text-gray-500">/${item.unit}</span>
+                        </div>
+                        <button onclick="contactSeller(${item.id})" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-3xl text-sm font-medium">
+                            Contact Seller
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterListings() {
+            const term = document.getElementById('search-input').value.toLowerCase().trim();
+            renderListings(term ? listings.filter(l => 
+                l.name.toLowerCase().includes(term) || l.location.toLowerCase().includes(term)
+            ) : listings);
+        }
+
+        // Image preview for seller upload (unchanged)
+        function previewImages(event) {
+            const container = document.getElementById('image-preview-container');
+            container.innerHTML = '';
+            currentPostImages = [];
+
+            const files = Array.from(event.target.files).slice(0, 5);
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPostImages.push(e.target.result);
+                    const div = document.createElement('div');
+                    div.className = "relative";
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-20 object-cover rounded-2xl border">
+                        <button onclick="removePreviewImage(${index})" 
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">×</button>
+                    `;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removePreviewImage(index) {
+            currentPostImages.splice(index, 1);
+            const container = document.getElementById('image-preview-container');
+            container.innerHTML = '';
+            currentPostImages.forEach((src, i) => {
+                const div = document.createElement('div');
+                div.className = "relative";
+                div.innerHTML = `
+                    <img src="${src}" class="w-full h-20 object-cover rounded-2xl border">
+                    <button onclick="removePreviewImage(${i})" 
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">×</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showPostModal() {
+            document.getElementById('post-modal').classList.remove('hidden');
+            document.getElementById('post-modal').classList.add('flex');
+            currentPostImages = [];
+            document.getElementById('image-preview-container').innerHTML = '';
+        }
+
+        function closePostModal() {
+            const modal = document.getElementById('post-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function submitPost() {
+            const name = document.getElementById('post-name').value.trim();
+            const phone = document.getElementById('seller-phone').value.trim();
+
+            if (!name) {
+                alert("Please enter the product name.");
+                return;
+            }
+            if (!phone) {
+                alert("Please provide your phone number so buyers can contact you.");
+                return;
+            }
+
+            alert(`✅ Your listing has been submitted for review!\n\nPosting fee: MK 10,000\n\nImages uploaded: ${currentPostImages.length}`);
+            closePostModal();
+        }
+
+        function contactSeller(id) {
+            const item = listings.find(l => l.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-product-name').textContent = item.name;
+            document.getElementById('modal-seller').textContent = `${item.seller} • ${item.location}`;
+
+            const imagesContainer = document.getElementById('modal-images');
+            
+            if (item.images && item.images.length > 0) {
+                imagesContainer.innerHTML = item.images.map(src => `
+                    <img src="${src}" 
+                         class="w-full rounded-2xl border cursor-pointer hover:opacity-90 transition-opacity" 
+                         onclick="showLightbox('${src}')"
+                         alt="Produce photo">
+                `).join('');
+            } else {
+                imagesContainer.innerHTML = `<p class="text-gray-400 text-sm col-span-2 text-center py-8">No photos uploaded for this listing</p>`;
+            }
+
+            // WhatsApp handling
+            let whatsappNum = item.whatsapp.replace(/\D/g, '');
+            if (whatsappNum.length === 9 && (whatsappNum.startsWith('88') || whatsappNum.startsWith('99'))) {
+                whatsappNum = '265' + whatsappNum;
+            } else if (!whatsappNum.startsWith('265')) {
+                whatsappNum = '265' + whatsappNum;
+            }
+
+            const contactHTML = `
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-2xl">
+                    <div>
+                        <p class="text-sm text-gray-500">Phone</p>
+                        <p class="font-mono font-medium">${item.phone}</p>
+                    </div>
+                    <a href="tel:${item.phone}" class="bg-green-600 text-white px-6 py-3 rounded-2xl text-sm font-medium">Call</a>
+                </div>
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-2xl">
+                    <div>
+                        <p class="text-sm text-gray-500">WhatsApp</p>
+                        <p class="font-mono font-medium">${item.whatsapp}</p>
+                    </div>
+                    <a href="https://wa.me/${whatsappNum}" target="_blank" 
+                       class="bg-green-600 text-white px-6 py-3 rounded-2xl text-sm font-medium">Message on WhatsApp</a>
+                </div>
+            `;
+
+            document.getElementById('contact-info').innerHTML = contactHTML;
+            document.getElementById('contact-modal').classList.remove('hidden');
+            document.getElementById('contact-modal').classList.add('flex');
+        }
+
+        // Lightbox functions
+        function showLightbox(src) {
+            document.getElementById('lightbox-image').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contact-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function toggleCart() {
+            alert("Cart feature coming soon! 🛒");
+        }
+
+        window.onload = () => renderListings(listings);
+    </script>
+</body>
+</html>
